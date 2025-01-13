@@ -38,6 +38,10 @@ A WordPress plugin for adding age verification popups to WooCommerce products.
 3. Enable age verification
 4. Set minimum age and calculation method
 
+### Plugin Screenshot
+![Plugin Screenshot](assets/images/thaitop-age-verification-popup.jpg) 
+
+
 ## Support
 
 For support and assistance, please contact:
