@@ -1,0 +1,137 @@
+# Copyright (C) 2024 ThaiTop
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: ThaiTop Age Verification Popup 1.2.4\n"
+"Report-Msgid-Bugs-To: https://thaitoptecs.com/support\n"
+"POT-Creation-Date: 2024-03-20 10:00:00+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2024-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: woo-age-verification-popup.php:123
+msgid "Age Verification"
+msgstr ""
+
+#: woo-age-verification-popup.php:124
+msgid "Enable Age Verification"
+msgstr ""
+
+#: woo-age-verification-popup.php:125
+msgid "Check this to enable age verification for this product."
+msgstr ""
+
+#: woo-age-verification-popup.php:132
+msgid "Minimum Age Required"
+msgstr ""
+
+#: woo-age-verification-popup.php:133
+msgid "Enter the minimum age required to purchase this product."
+msgstr ""
+
+#: woo-age-verification-popup.php:142
+msgid "Age Calculation Method"
+msgstr ""
+
+#: woo-age-verification-popup.php:143
+msgid "Choose how to calculate the age requirement."
+msgstr ""
+
+#: woo-age-verification-popup.php:145
+msgid "Calculate from current date"
+msgstr ""
+
+#: woo-age-verification-popup.php:146
+msgid "Calculate from custom date"
+msgstr ""
+
+#: woo-age-verification-popup.php:153
+msgid "Reference Date"
+msgstr ""
+
+#: woo-age-verification-popup.php:154
+msgid "Enter the date to calculate age from (YYYY-MM-DD format)."
+msgstr ""
+
+#: woo-age-verification-popup.php:206
+msgid "Age Verification Required"
+msgstr ""
+
+#: woo-age-verification-popup.php:207
+msgid "You must be %s years or older to view this product."
+msgstr ""
+
+#: woo-age-verification-popup.php:209
+msgid "Age will be calculated as of <strong>%s</strong>"
+msgstr ""
+
+#: woo-age-verification-popup.php:211
+msgid "Age will be calculated from <strong>current date</strong>"
+msgstr ""
+
+#: woo-age-verification-popup.php:216
+msgid "Day"
+msgstr ""
+
+#: woo-age-verification-popup.php:217
+msgid "Select Day"
+msgstr ""
+
+#: woo-age-verification-popup.php:225
+msgid "Month"
+msgstr ""
+
+#: woo-age-verification-popup.php:226
+msgid "Select Month"
+msgstr ""
+
+#: woo-age-verification-popup.php:251
+msgid "Year"
+msgstr ""
+
+#: woo-age-verification-popup.php:252
+msgid "Select Year"
+msgstr ""
+
+#: woo-age-verification-popup.php:263
+msgid "Verify Age"
+msgstr ""
+
+#: woo-age-verification-popup.php:264
+msgid "Cancel"
+msgstr ""
+
+#: woo-age-verification-popup.php:308
+msgid "Please fill in all fields."
+msgstr ""
+
+#: woo-age-verification-popup.php:342
+msgid "Sorry, you must be older to view this product."
+msgstr ""
+
+#: includes/class-wc-settings-age-verification.php:89
+msgid "Age Verification Popup Style"
+msgstr ""
+
+#: includes/class-wc-settings-age-verification.php:91
+msgid "Customize the appearance of the age verification popup."
+msgstr ""
+
+#: includes/class-wc-settings-age-verification.php:96
+msgid "Show Buddhist Year"
+msgstr ""
+
+#: includes/class-wc-settings-age-verification.php:97
+msgid "Show Buddhist year (BE) next to Gregorian year (CE)"
+msgstr ""
+
+#: includes/class-wc-settings-age-verification.php:103
+msgid "Color Template"
+msgstr ""
+
+#: includes/class-wc-settings-age-verification.php:104
+msgid "Choose a predefined color template or select \"Custom Colors\" to customize each color."
+msgstr "" 

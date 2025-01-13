@@ -1,0 +1,209 @@
+/**
+ * ThaiTop Age Verification Popup
+ * https://thaitoptecs.com/plugins/woo-age-verification-popup
+ *
+ * Copyright (c) 2024 ThaiTop
+ * Licensed under the GPL v2 or later license.
+ */
+
+.age-verification-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background: linear-gradient(to bottom, var(--age-verification-bg-start) 0%, var(--age-verification-bg-end) 80%);
+    color: var(--age-verification-text);
+    padding: 30px;
+    border-radius: 4px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.popup-content h2 {
+    color: var(--age-verification-text);
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: normal;
+}
+
+.popup-content p {
+    color: var(--age-verification-text-secondary);
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.reference-date-notice {
+    background: rgba(102, 192, 244, 0.1);
+    border-left: 3px solid var(--age-verification-accent);
+    padding: 10px 15px;
+    margin: 10px auto 15px;
+    font-size: 13px;
+    color: var(--age-verification-text-secondary) !important;
+    text-align: center;
+    border-radius: 0 3px 3px 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 80%;
+}
+
+.reference-date-notice::before {
+    content: '\f073';
+    font-family: 'dashicons';
+    margin-right: 10px;
+    font-size: 16px;
+    color: var(--age-verification-accent);
+}
+
+.reference-date-notice strong {
+    color: var(--age-verification-accent);
+    font-weight: 600;
+    margin: 0 5px;
+}
+
+.birthday-selector {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.birthday-selector select {
+    background-color: var(--age-verification-bg-start);
+    border: 1px solid var(--age-verification-accent);
+    color: var(--age-verification-text);
+    padding: 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    min-width: 100px;
+}
+
+.birthday-selector select:hover {
+    border-color: var(--age-verification-accent);
+}
+
+.birthday-selector select:focus {
+    outline: none;
+    border-color: var(--age-verification-accent);
+    box-shadow: 0 0 5px rgba(102, 192, 244, 0.5);
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+#verify-age-btn {
+    background: linear-gradient(to right, var(--age-verification-button-start) 0%, var(--age-verification-button-end) 100%);
+    color: var(--age-verification-text);
+    border: none;
+    padding: 8px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease;
+}
+
+#verify-age-btn:hover {
+    background: linear-gradient(to right, var(--age-verification-accent) 0%, var(--age-verification-button-end) 100%);
+}
+
+#verify-age-btn:active {
+    transform: scale(0.98);
+}
+
+#cancel-age-btn {
+    background: transparent;
+    color: var(--age-verification-text-secondary);
+    border: 1px solid var(--age-verification-text-secondary);
+    padding: 8px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease;
+}
+
+#cancel-age-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--age-verification-text);
+    border-color: var(--age-verification-text);
+}
+
+.error-message {
+    background: rgba(255, 68, 68, 0.1);
+    border-left: 3px solid #ff4444;
+    color: #ff6b6b;
+    margin: 15px auto;
+    padding: 10px 15px;
+    font-size: 13px;
+    font-weight: 500;
+    display: none;
+    text-align: center;
+    border-radius: 0 3px 3px 0;
+    max-width: 80%;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.error-message.show {
+    display: block;
+}
+
+.error-message::before {
+    content: '\f534';
+    font-family: 'dashicons';
+    margin-right: 10px;
+    font-size: 16px;
+    color: #ff4444;
+    vertical-align: middle;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .birthday-selector {
+        flex-direction: column;
+    }
+    
+    .birthday-selector select {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .popup-content {
+        padding: 20px;
+        margin: 0 15px;
+        width: calc(100% - 30px);
+    }
+
+    .reference-date-notice {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+} 
