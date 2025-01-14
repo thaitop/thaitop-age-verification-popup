@@ -8,7 +8,7 @@ A WordPress plugin for adding age verification popups to WooCommerce products.
 - ✅ Customizable minimum age requirements
 - ✅ Calculate age from current or custom date
 - ✅ Buddhist year display support
-- ✅ 4 color templates (Steam, Dark, Light, Nature)
+- ✅ 4 color templates (Steam, Dark, Light, Nature) or Custom
 - ✅ Full color customization options
 - ✅ Mobile-responsive design
 - ✅ Multi-language support
