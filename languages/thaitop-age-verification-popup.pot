@@ -134,4 +134,7 @@ msgstr ""
 
 #: includes/class-wc-settings-age-verification.php:104
 msgid "Choose a predefined color template or select \"Custom Colors\" to customize each color."
-msgstr "" 
+msgstr ""
+
+msgid "You must be between %1$s and %2$s years old to view this product."
+msgstr ""

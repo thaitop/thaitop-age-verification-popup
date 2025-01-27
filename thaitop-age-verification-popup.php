@@ -3,7 +3,7 @@
  * Plugin Name: ThaiTop Age Verification Popup
  * Plugin URI: 
  * Description: Add age verification popup for WooCommerce products with customizable minimum age requirements. Features include age calculation from current or custom date, Buddhist year display support, multiple color templates, and mobile-responsive design. Perfect for stores selling age-restricted products.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: ThaiTop
  * Author URI: https://thaitoptecs.com
  * Text Domain: thaitop-age-verification-popup
@@ -35,7 +35,11 @@ if (!defined('ABSPATH')) {
 if (!class_exists('ThaiTop_Age_Verification_Popup')) {
 
     class ThaiTop_Age_Verification_Popup {
-        
+        /**
+         * @var WC_Logger|null Logger instance for WooCommerce logging
+         */
+        private $logger = null;
+
         public function __construct() {
             add_action('plugins_loaded', array($this, 'init'));
             
@@ -146,6 +150,7 @@ if (!class_exists('ThaiTop_Age_Verification_Popup')) {
 
                 <div class="age-verification-fields" style="display: none;">
                     <?php
+                    // Minimum Age field
                     woocommerce_wp_text_input(array(
                         'id' => '_minimum_age',
                         'label' => esc_html__('Minimum Age Required', 'thaitop-age-verification-popup'),
@@ -157,6 +162,19 @@ if (!class_exists('ThaiTop_Age_Verification_Popup')) {
                         )
                     ));
 
+                    // Maximum Age field (ย้ายมาอยู่ต่อจาก Minimum Age)
+                    woocommerce_wp_text_input(array(
+                        'id' => '_maximum_age',
+                        'label' => esc_html__('Maximum Age Allowed', 'thaitop-age-verification-popup'),
+                        'description' => esc_html__('Enter the maximum age allowed to purchase this product (leave empty for no limit).', 'thaitop-age-verification-popup'),
+                        'type' => 'number',
+                        'custom_attributes' => array(
+                            'min' => '0',
+                            'step' => '1'
+                        )
+                    ));
+
+                    // Age Calculation Method field
                     woocommerce_wp_select(array(
                         'id' => '_age_calculation_type',
                         'label' => esc_html__('Age Calculation Method', 'thaitop-age-verification-popup'),
@@ -168,6 +186,7 @@ if (!class_exists('ThaiTop_Age_Verification_Popup')) {
                         'value' => get_post_meta($post->ID, '_age_calculation_type', true) ?: 'current'
                     ));
 
+                    // Reference Date field
                     woocommerce_wp_text_input(array(
                         'id' => '_reference_date',
                         'label' => esc_html__('Reference Date', 'thaitop-age-verification-popup'),
@@ -246,6 +265,13 @@ if (!class_exists('ThaiTop_Age_Verification_Popup')) {
                     update_post_meta($post_id, '_reference_date', $reference_date);
                 }
             }
+
+            if (isset($_POST['_maximum_age'])) {
+                $maximum_age = sanitize_text_field(wp_unslash($_POST['_maximum_age']));
+                if (is_numeric($maximum_age) || empty($maximum_age)) {
+                    update_post_meta($post_id, '_maximum_age', $maximum_age);
+                }
+            }
         }
 
         public function enqueue_scripts() {
@@ -296,15 +322,38 @@ if (!class_exists('ThaiTop_Age_Verification_Popup')) {
             
             if ($require_verification === 'yes') {
                 $minimum_age = get_post_meta($product->get_id(), '_minimum_age', true);
+                $maximum_age = get_post_meta($product->get_id(), '_maximum_age', true);
                 $calculation_type = get_post_meta($product->get_id(), '_age_calculation_type', true) ?: 'current';
                 $reference_date = get_post_meta($product->get_id(), '_reference_date', true);
                 ?>
                 <div id="age-verification-popup" class="age-verification-popup" style="display: none;">
                     <div class="popup-content">
                         <h2><?php esc_html_e('Age Verification Required', 'thaitop-age-verification-popup'); ?></h2>
-                        <p><?php /* translators: %s: minimum age required */ printf(esc_html__('You must be %s years or older to view this product.', 'thaitop-age-verification-popup'), esc_html($minimum_age)); ?></p>
+                        
+                        <?php if (!empty($maximum_age)) : ?>
+                            <p><?php 
+                                printf(/* translators: %1$s: minimum age, %2$s: maximum age */
+                                    esc_html__('You must be between %1$s and %2$s years old to view this product.', 'thaitop-age-verification-popup'),
+                                    esc_html($minimum_age),
+                                    esc_html($maximum_age)
+                                ); 
+                            ?></p>
+                        <?php else : ?>
+                            <p><?php 
+                                printf(/* translators: %s: minimum age required */
+                                    esc_html__('You must be %s years or older to view this product.', 'thaitop-age-verification-popup'),
+                                    esc_html($minimum_age)
+                                ); 
+                            ?></p>
+                        <?php endif; ?>
+
                         <?php if ($calculation_type === 'custom' && $reference_date) : ?>
-                            <p class="reference-date-notice"><?php /* translators: %s: reference date in format "j F Y" */ printf(wp_kses_post(__('Age will be calculated as of <strong>%s</strong>', 'thaitop-age-verification-popup')), esc_html(gmdate('j F Y', strtotime($reference_date)))); ?></p>
+                            <p class="reference-date-notice"><?php 
+                                printf(/* translators: %s: reference date in format "j F Y" */
+                                    wp_kses_post(__('Age will be calculated as of <strong>%s</strong>', 'thaitop-age-verification-popup')),
+                                    esc_html(gmdate('j F Y', strtotime($reference_date)))
+                                ); 
+                            ?></p>
                         <?php else : ?>
                             <p class="reference-date-notice"><?php esc_html_e('Age will be calculated from current date', 'thaitop-age-verification-popup'); ?></p>
                         <?php endif; ?>
@@ -364,6 +413,7 @@ if (!class_exists('ThaiTop_Age_Verification_Popup')) {
                         <?php if ($calculation_type === 'custom' && $reference_date) : ?>
                             <input type="hidden" id="reference-date" value="<?php echo esc_attr($reference_date); ?>">
                         <?php endif; ?>
+                        <input type="hidden" id="maximum-age" value="<?php echo esc_attr($maximum_age); ?>">
                     </div>
                 </div>
                 <?php
@@ -377,52 +427,91 @@ if (!class_exists('ThaiTop_Age_Verification_Popup')) {
             $birth_month = isset($_POST['birth_month']) ? intval(wp_unslash($_POST['birth_month'])) : 0;
             $birth_year = isset($_POST['birth_year']) ? intval(wp_unslash($_POST['birth_year'])) : 0;
             $minimum_age = isset($_POST['minimum_age']) ? intval(wp_unslash($_POST['minimum_age'])) : 0;
+            $maximum_age = isset($_POST['maximum_age']) && !empty($_POST['maximum_age']) ? intval(wp_unslash($_POST['maximum_age'])) : 0;
             $calculation_type = isset($_POST['calculation_type']) ? sanitize_text_field(wp_unslash($_POST['calculation_type'])) : 'current';
             $reference_date = isset($_POST['reference_date']) ? sanitize_text_field(wp_unslash($_POST['reference_date'])) : '';
 
             if (!$birth_day || !$birth_month || !$birth_year || !$minimum_age) {
                 if (isset($this->logger)) {
-                    $this->logger->debug(
-                        'Age verification failed: Missing required fields',
-                        array('source' => 'age-verification')
-                    );
+                    $this->logger->debug('Age verification failed: Missing required fields', array('source' => 'age-verification'));
                 }
                 wp_send_json_error(esc_html__('Please fill in all fields.', 'thaitop-age-verification-popup'));
             }
 
-            $birth_date = new DateTime("$birth_year-$birth_month-$birth_day");
-            
-            // Use reference date if custom calculation type and date provided, otherwise use current date
-            $compare_date = ($calculation_type === 'custom' && $reference_date) ? new DateTime($reference_date) : new DateTime();
-            
-            $age = $birth_date->diff($compare_date)->y;
+            try {
+                // สร้าง DateTime objects สำหรับวันเกิดและวันที่เปรียบเทียบ
+                $birth_date = new DateTime();
+                $birth_date->setDate($birth_year, $birth_month, $birth_day);
+                $birth_date->setTime(0, 0, 0);
 
-            if ($age >= $minimum_age) {
-                if (isset($this->logger)) {
-                    $this->logger->info(
-                        sprintf('Age verification successful: User age %d meets minimum requirement of %d (Calculation type: %s, Reference date: %s)',
-                            $age,
-                            $minimum_age,
-                            $calculation_type,
-                            $calculation_type === 'custom' ? $reference_date : 'current date'
-                        ),
-                        array('source' => 'age-verification')
-                    );
+                $compare_date = ($calculation_type === 'custom' && $reference_date) ? 
+                    new DateTime($reference_date) : 
+                    new DateTime('today');
+                $compare_date->setTime(0, 0, 0);
+
+                // ตรวจสอบว่าวันเกิดไม่เกินวันที่ปัจจุบัน
+                if ($birth_date > $compare_date) {
+                    if (isset($this->logger)) {
+                        $this->logger->notice('Age verification failed: Birth date is in the future');
+                    }
+                    wp_send_json_error(esc_html__('Invalid birth date.', 'thaitop-age-verification-popup'));
                 }
+
+                // คำนวณอายุอย่างแม่นยำ
+                $age = $compare_date->diff($birth_date);
+                $years = $age->y;
+
+                // บันทึก log การคำนวณอายุ
+                if (isset($this->logger)) {
+                    $this->logger->debug(sprintf(
+                        'Age calculation: Birth date: %s, Compare date: %s, Age: %d years',
+                        $birth_date->format('Y-m-d'),
+                        $compare_date->format('Y-m-d'),
+                        $years
+                    ));
+                }
+
+                // ตรวจสอบอายุขั้นต่ำ
+                if ($years < $minimum_age) {
+                    if (isset($this->logger)) {
+                        $this->logger->notice(sprintf(
+                            'Age verification failed: User age %d is below minimum requirement of %d',
+                            $years,
+                            $minimum_age
+                        ));
+                    }
+                    wp_send_json_error(esc_html__('Sorry, you must be older to view this product.', 'thaitop-age-verification-popup'));
+                }
+
+                // ตรวจสอบอายุสูงสุด (ถ้ามีการกำหนด)
+                if (!empty($maximum_age) && $years > intval($maximum_age)) {
+                    if (isset($this->logger)) {
+                        $this->logger->notice(sprintf(
+                            'Age verification failed: User age %d exceeds maximum limit of %d',
+                            $years,
+                            $maximum_age
+                        ));
+                    }
+                    wp_send_json_error(esc_html__('Sorry, you exceed the maximum age limit for this product.', 'thaitop-age-verification-popup'));
+                }
+
+                // บันทึก log เมื่อผ่านการตรวจสอบ
+                if (isset($this->logger)) {
+                    $this->logger->info(sprintf(
+                        'Age verification successful: User age %d is within allowed range (min: %d, max: %s)',
+                        $years,
+                        $minimum_age,
+                        !empty($maximum_age) ? $maximum_age : 'no limit'
+                    ));
+                }
+
                 wp_send_json_success();
-            } else {
+
+            } catch (Exception $e) {
                 if (isset($this->logger)) {
-                    $this->logger->notice(
-                        sprintf('Age verification failed: User age %d does not meet minimum requirement of %d (Calculation type: %s, Reference date: %s)',
-                            $age,
-                            $minimum_age,
-                            $calculation_type,
-                            $calculation_type === 'custom' ? $reference_date : 'current date'
-                        ),
-                        array('source' => 'age-verification')
-                    );
+                    $this->logger->error('Age calculation error: ' . $e->getMessage());
                 }
-                wp_send_json_error(esc_html__('Sorry, you must be older to view this product.', 'thaitop-age-verification-popup'));
+                wp_send_json_error(esc_html__('An error occurred while verifying your age.', 'thaitop-age-verification-popup'));
             }
         }
 
@@ -434,4 +523,4 @@ if (!class_exists('ThaiTop_Age_Verification_Popup')) {
     }
 
     new ThaiTop_Age_Verification_Popup();
-} 
+}

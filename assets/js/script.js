@@ -19,10 +19,46 @@ jQuery(document).ready(function($) {
         var birthMonth = $('#birth-month').val();
         var birthYear = $('#birth-year').val();
         var minimumAge = $('#minimum-age').val();
+        var maximumAge = $('#maximum-age').val();
         var calculationType = $('#calculation-type').val();
         var referenceDate = calculationType === 'custom' ? ($('#reference-date').val() || '') : '';
 
-        // Validate all fields are filled
+        // คำนวณอายุอย่างละเอียด
+        function getDateDifference(startDate, endDate) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            
+            let years = end.getFullYear() - start.getFullYear();
+            let months = end.getMonth() - start.getMonth();
+            let days = end.getDate() - start.getDate();
+
+            if (days < 0) {
+                months--;
+                const lastMonth = new Date(end.getFullYear(), end.getMonth(), 0);
+                days += lastMonth.getDate();
+            }
+
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            return { years, months, days };
+        }
+
+        // แปลง Reference Date และคำนวณอายุ
+        var birthDate = new Date(birthYear, birthMonth - 1, birthDay);
+        var compareDate = (calculationType === 'custom' && referenceDate) ? 
+            new Date(referenceDate.split('-').join('/')) : 
+            new Date();
+
+        birthDate.setHours(0, 0, 0, 0);
+        compareDate.setHours(0, 0, 0, 0);
+
+        var ageDiff = getDateDifference(birthDate, compareDate);
+        var age = ageDiff.years;
+
+        // ตรวจสอบการกรอกข้อมูล
         if (!birthDay || !birthMonth || !birthYear) {
             showError('Please select your complete date of birth.');
             return;
@@ -38,6 +74,7 @@ jQuery(document).ready(function($) {
                 birth_month: birthMonth,
                 birth_year: birthYear,
                 minimum_age: minimumAge,
+                maximum_age: maximumAge,
                 calculation_type: calculationType,
                 reference_date: referenceDate,
                 nonce: thaitopAgeVerification.nonce
@@ -95,4 +132,4 @@ jQuery(document).ready(function($) {
     if (sessionStorage.getItem(storageKey) === 'true') {
         $('#age-verification-popup').hide();
     }
-}); 
+});
