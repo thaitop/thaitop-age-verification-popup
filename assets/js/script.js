@@ -2,7 +2,7 @@
  * ThaiTop Age Verification Popup
  * https://thaitoptecs.com/plugins/thaitop-age-verification-popup
  *
- * Copyright (c) 2024 ThaiTop
+ * Copyright (c) 2025 ThaiTop
  * Licensed under the GPL v2 or later license.
  */
 jQuery(document).ready(function($) {

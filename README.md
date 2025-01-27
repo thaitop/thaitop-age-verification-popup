@@ -18,7 +18,7 @@ A WordPress plugin for adding age verification popups to WooCommerce products.
 ## Version Information
 
 - Current Version: 1.1.0
-- Last Updated: March 2024
+- Last Updated: January,27 2025
 - Requires WordPress: 5.0+
 - Tested up to WordPress: 6.7
 - Requires PHP: 7.2+
